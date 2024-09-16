@@ -1,6 +1,7 @@
 (ns to.tuo.app-academy-countdown
   (:require [goog.dom :as gdom]
-            [goog.string :as gstring]))
+            [goog.string :as gstring]
+            [goog.string.format]))
 
 (defn get-timezone []
   (.. (js/Intl.DateTimeFormat) (resolvedOptions) -timeZone))

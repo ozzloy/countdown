@@ -6,6 +6,8 @@
  {:dev {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.18"}}
         :extra-paths ["target" "test"]}
   :build {:main-opts ["-m" "figwheel.main" "-b" "dev" "-r"]}
+  :prod {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.18"}}
+         :main-opts ["-m" "figwheel.main" "-bo" "prod"]}
   :clean {:extra-deps {io.github.clojure/tools.build
                        {:mvn/version "0.10.5"}}
           :ns-default build
