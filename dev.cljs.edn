@@ -1,4 +1,4 @@
 ^{:watch-dirs ["src"]
   :css-dirs ["resources/public/css"]
   :auto-testing true}
-{:main to.tuo.app-academy-countdown}
+{:main to.tuo.countdown}
