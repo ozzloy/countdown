@@ -1,0 +1,47 @@
+* test it out
+
+** update =resources/public/index.html=
+
+#+begin_src html
+  <script src="cljs-out/dev-main.js"></script>
+  <!-- <script src="js/main.js"></script> -->
+#+end_src
+
+** build dev version on dev machine
+
+#+begin_src bash
+  clojure -M:dev:build
+#+end_src
+
+this should build and open a browser window
+
+then edit =src/to/tuo/countdown.cljs=.  every file save, the page will
+hot reload.
+
+* deploy
+
+** update =resources/public/index.html=
+
+#+begin_src html
+  <!-- <script src="cljs-out/dev-main.js"></script> -->
+  <script src="js/main.js"></script>
+#+end_src
+
+** build the production version on dev machine
+
+#+begin_src bash
+  clojure -M:prod
+#+end_src
+
+** copy files from dev machine to server
+
+#+begin_src bash
+  rsync -ravz resources ozzloy@each.do:countdown
+#+end_src
+
+** on server, move the files, set permissions
+
+#+begin_src bash
+  sudo cp -r countdown/resources/public/* /var/www/countdown.each.do/
+  sudo chown -R www-data:www-data /var/www/countdown.each.do/
+#+end_src
