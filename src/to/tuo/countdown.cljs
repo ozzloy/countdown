@@ -1,7 +1,9 @@
 (ns to.tuo.countdown
-  (:require [goog.dom :as gdom]
-            [goog.string :as gstring]
-            [goog.string.format]))
+  (:require
+   [clojure.string :as str]
+   [goog.dom :as gdom]
+   [goog.string :as gstring]
+   [goog.string.format]))
 
 (defn current-offset [] (.getTimezoneOffset (js/Date.)))
 
