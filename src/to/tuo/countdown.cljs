@@ -5,6 +5,15 @@
    [goog.string :as gstring]
    [goog.string.format]))
 
+(defn things []
+  [{:what "Class Start" :hour 8 :minute 0}
+   {:what "Break Time" :hour 10 :minute 0}
+   {:what "Back from Break" :hour 10 :minute 10}
+   {:what "Lunch Starts" :hour 11 :minute 15}
+   {:what "Lunch Ends" :hour 12 :minute 30}
+   {:what "End 🍐" :hour 16 :minute 0}
+   {:what "Class Ends" :hour 17 :minute 0}])
+
 (defn local-offset [] (.getTimezoneOffset (js/Date.)))
 
 (defn pacific-offset [] 420)
@@ -28,16 +37,19 @@
 (defn format-countdown [{:keys [hours minutes seconds]}]
   (gstring/format "%02dH%02dM%02dS" hours minutes seconds))
 
+(defn format-thing [{:keys [what hour minute]}]
+  (str "<div class=\"countdown-row\"><span class=\"timeleft\">"
+       (format-countdown (time-until-pacific-time hour minute))
+       "</span><span class=\"description\">"
+       what
+       "</span></div>"))
+
 (defn update-countdown []
   (let [app (gdom/getElement "app")]
     (set!
      (.-innerHTML app)
-     (str
-      "<h1>" what ": " (format-countdown countdown) "</h1>"
-
-      "<h1> end of day: "
-      (format-countdown (time-until-pacific-time 17 0))
-      "</h1>"))))
+     (clojure.string/join (map format-thing (things)))
+     )))
 
 (defn start-clock []
   (js/setInterval update-countdown 100))
