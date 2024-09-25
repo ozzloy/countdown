@@ -1,0 +1,37 @@
+body {
+  background-image: url('../img/hour1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.countdown-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 20px 0;
+  font-size: 24px;
+  background-color: rgba(211, 211, 211, 0.5);
+  border: 2px solid rgba(211, 211, 211, 0.8);
+  border-radius: 8px;
+  padding: 10px 20px;
+  width: 33%;
+  box-shadow: 0 0 10px rgba(211, 211, 211, 0.5);
+  text-align: center;
+  margin-left: 20px;
+}
+
+.timeleft, .description {
+  color: #333;
+  text-shadow:
+    0 0 5px #555,
+    0 0 10px #999,
+    0 0 15px #ccc;
+  margin-right: 10px;
+}
+
+.description {
+  color: #333;
+}
