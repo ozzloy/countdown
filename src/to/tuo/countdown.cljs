@@ -5,16 +5,15 @@
    [goog.string :as gstring]
    [goog.string.format]))
 
-(defn current-offset [] (.getTimezoneOffset (js/Date.)))
+(defn local-offset [] (.getTimezoneOffset (js/Date.)))
 
 (defn pacific-offset [] 420)
 
 (defn time-until-pacific-time [hour minute]
   (let [local-now (js/Date.)
-        local-offset (.getTimezoneOffset local-now)
         pacific-time (doto (js/Date. (.getTime local-now))
                        (.setHours hour (- (+ minute (pacific-offset))
-                                          local-offset) 0 0))
+                                          (local-offset)) 0 0))
         today? (< (.getTime local-now) (.getTime pacific-time))
         pacific-time (if today?
                        pacific-time
@@ -29,9 +28,8 @@
 (defn format-countdown [{:keys [hours minutes seconds]}]
   (gstring/format "%02dH%02dM%02dS" hours minutes seconds))
 
-(defn update-countdown [what hour minute]
-  (let [app (gdom/getElement "app")
-        countdown (time-until-pacific-time hour minute)]
+(defn update-countdown []
+  (let [app (gdom/getElement "app")]
     (set!
      (.-innerHTML app)
      (str
@@ -42,10 +40,10 @@
       "</h1>"))))
 
 (defn start-clock []
-  (js/setInterval #(update-countdown "class starts" 8 0) 100))
+  (js/setInterval update-countdown 100))
 
 (defn ^:export init []
-  (update-countdown "class starts" 8 0)
+  (update-countdown)
   (start-clock))
 
 (defn ^:after-load mount []
