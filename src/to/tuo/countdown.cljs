@@ -34,12 +34,22 @@
         seconds (quot (rem delta (* 1000 60)) 1000)]
     {:hours hours, :minutes minutes, :seconds seconds}))
 
-(defn format-countdown [{:keys [hours minutes seconds]}]
-  (gstring/format "%02dH%02dM%02dS" hours minutes seconds))
+(defn make-row [thing]
+  (let [{:keys [what hour minute]} thing
 
-(defn format-thing [{:keys [what hour minute]}]
+        {:keys [hours minutes seconds]}
+        (time-until-pacific-time hour minute)]
+    {:what what
+     :hours hours
+     :minutes minutes
+     :seconds seconds}))
+
+(defn format-countdown [{:keys [hours minutes seconds]}]
+  (gstring/format "%02d:%02d:%02d" hours minutes seconds))
+
+(defn format-row [{:keys [what] :as row}]
   (str "<div class=\"countdown-row\"><span class=\"timeleft\">"
-       (format-countdown (time-until-pacific-time hour minute))
+       (format-countdown row)
        "</span><span class=\"description\">"
        what
        "</span></div>"))
@@ -48,8 +58,10 @@
   (let [app (gdom/getElement "app")]
     (set!
      (.-innerHTML app)
-     (clojure.string/join (map format-thing (things)))
-     )))
+     (clojure.string/join
+      (map format-row
+           (sort-by (juxt :hours :minutes :seconds)
+                    (map make-row (things))))))))
 
 (defn start-clock []
   (js/setInterval update-countdown 100))
