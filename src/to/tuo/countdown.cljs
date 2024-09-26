@@ -1,13 +1,27 @@
 (ns to.tuo.countdown
   (:require
-   [clojure.string :as str]
-   [goog.dom :as gdom]
    [goog.string :as gstring]
    [goog.string.format]
    [reagent.core :as r]
    [reagent.dom :as rdom]))
 
 (def now_ (r/atom (js/Date.)))
+
+(defn row [thing]
+  [:div.countdown-row
+   [:h1.description (:what thing)]
+   [:div.timeleft
+    [:div.timer-section
+     [:div.time (:hours thing)]
+     [:span "Hours"]]
+    [:div.separator ":"]
+    [:div.timer-section
+     [:div.time (:minutes thing)]
+     [:span "Minutes"]]
+    [:div.separator ":"]
+    [:div.timer-section
+     [:div.time (:seconds thing)]
+     [:span "Seconds"]]]])
 
 (defn things []
   [{:what "Class Start"     :hour  8 :minute  0}
@@ -37,7 +51,7 @@
         seconds (quot (rem delta (* 1000 60)) 1000)]
     {:hours hours, :minutes minutes, :seconds seconds}))
 
-(defn make-row [now thing]
+(defn make-delta [now thing]
   (let [{:keys [what hour minute]} thing
 
         {:keys [hours minutes seconds]}
@@ -58,9 +72,9 @@
 (defn countdown-app []
   (fn []
     [:div
-     (for [row (sort-by (juxt :hours :minutes :seconds)
-                        (map #(make-row @now_ %) (things)))]
-       ^{:key row} [countdown-row row])]))
+     (for [delta (sort-by (juxt :hours :minutes :seconds)
+                        (map #(make-delta @now_ %) (things)))]
+       ^{:key delta} [row delta])]))
 
 (defn start-clock []
   (js/setInterval #(reset! now_ (js/Date.)) 100))
