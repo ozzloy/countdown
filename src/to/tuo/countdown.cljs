@@ -7,20 +7,20 @@
 
 (def now_ (r/atom (js/Date.)))
 
-(defn row [thing]
+(defn row [{:keys [what hours minutes seconds]}]
   [:div.countdown-row
-   [:h1.description (:what thing)]
+   [:h1.description what]
    [:div.timeleft
     [:div.timer-section
-     [:div.time (:hours thing)]
+     [:div.time (gstring/format "%02d" hours)]
      [:span "Hours"]]
     [:div.separator ":"]
     [:div.timer-section
-     [:div.time (:minutes thing)]
+     [:div.time (gstring/format "%02d" minutes)]
      [:span "Minutes"]]
     [:div.separator ":"]
     [:div.timer-section
-     [:div.time (:seconds thing)]
+     [:div.time (gstring/format "%02d" seconds)]
      [:span "Seconds"]]]])
 
 (defn things []
